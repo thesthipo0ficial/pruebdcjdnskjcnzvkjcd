@@ -14,6 +14,7 @@
         <video id="my-video" class="video-js vjs-default-skin hidden-video" controls data-setup='{}' loop>
             <source src="" type='video/mp4' />
         </video>
+        <button id="play-button">Play Video</button>
     </div>
     <script src="https://cdn.jsdelivr.net/gh/sh20raj/SopPlayer@main/CatSu/catsu.min.js"></script>
     <script>
@@ -30,25 +31,27 @@
             const apiKey = localStorage.getItem("api_key");
             const videoURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${apiKey}`;
             const videoPlayer = document.getElementById("my-video");
+            const playButton = document.getElementById("play-button");
 
-            // Establecer la fuente del video
+            // Set the source of the video
             videoPlayer.querySelector("source").src = videoURL;
 
-            // Cargar y reproducir el video
+            // Load the video
             videoPlayer.load();
-            
-            // Esperar a que se cargue el metadato del video antes de reproducirlo
-            videoPlayer.onloadedmetadata = function() {
+
+            // Handle user interaction (click on the play button)
+            playButton.addEventListener("click", function() {
+                // Play the video
                 videoPlayer.play();
-            };
-            
-            // Establecer el póster
+            });
+
+            // Set the poster
             videoPlayer.poster = posterURL || '';
 
-            // Mostrar el reproductor de video
+            // Display the video player
             videoPlayer.classList.remove("hidden-video");
         } else {
-            // Manejar el caso en el que no se proporciona un ID de video
+            // Handle the case where no video ID is provided
             console.error("ID de video no proporcionado en la URL");
         }
     </script>
