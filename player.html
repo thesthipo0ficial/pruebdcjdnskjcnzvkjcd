@@ -6,7 +6,7 @@
     <link rel='stylesheet' href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css'>
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Questrial'>
     <style>
-        /* Agrega estilos personalizados aquí si es necesario */
+        /* Add custom styles here if necessary */
     </style>
 </head>
 <body>
@@ -23,11 +23,12 @@
             return urlParams.get(nombre);
         }
 
-        // Obtener el ID del video de Google Drive desde la URL
+        // Get the video ID and API key from the URL
         const videoID = obtenerParametroDeURL("id");
+        const apiKey = obtenerParametroDeURL("api_key"); // Changed to "api_key"
         const posterURL = obtenerParametroDeURL("poster");
 
-            if (videoID && apiKey) {
+        if (videoID && apiKey) { // Check if both videoID and apiKey are present
             const videoURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${apiKey}`;
             const videoPlayer = document.getElementById("my-video");
             const playButton = document.getElementById("play-button");
@@ -50,8 +51,8 @@
             // Display the video player
             videoPlayer.classList.remove("hidden-video");
         } else {
-            // Handle the case where no video ID is provided
-            console.error("ID de video no proporcionado en la URL");
+            // Handle the case where either video ID or API key is missing
+            console.error("ID de video o API key no proporcionados en la URL");
         }
     </script>
 </body>
