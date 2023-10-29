@@ -7,10 +7,10 @@
 <body>
     <div>
         <video id="my-video" class="plyr" controls data-setup='{}'>
-            <!-- Aquí puedes agregar múltiples fuentes de video compatibles -->
-            <source src="" type='video/mp4' />
-            <source src="" type='video/mkv' />
-            <source src="" type='video/avi' />
+            <!-- Aquí puedes agregar múltiples fuentes de video compatibles con códecs de audio -->
+            <source src="" type='video/mp4' codecs="avc1.42E01E mp4a.40.2" />
+            <source src="" type='video/mkv' codecs="avc1.42E01E mp4a.40.2" />
+            <source src="" type='video/avi' codecs="xvid mp3" />
         </video>
         <button id="play-button">Play Video</button>
     </div>
@@ -33,10 +33,10 @@
             const videoPlayerElement = document.getElementById("my-video");
             const playButton = document.getElementById("play-button");
 
-            // Agregar las fuentes de video con sus tipos MIME
-            videoPlayerElement.querySelector('source[type="video/mp4"]').src = videoURL;
-            videoPlayerElement.querySelector('source[type="video/mkv"]').src = videoURL;
-            videoPlayerElement.querySelector('source[type="video/avi"]').src = videoURL;
+            // Agregar las fuentes de video con códecs de audio
+            videoPlayerElement.querySelector('source[type="video/mp4"]').src = videoURL + "&mimeType=video/mp4&codecs=avc1.42E01E,mp4a.40.2";
+            videoPlayerElement.querySelector('source[type="video/mkv"]').src = videoURL + "&mimeType=video/x-matroska&codecs=avc1.42E01E,mp4a.40.2";
+            videoPlayerElement.querySelector('source[type="video/avi"]').src = videoURL + "&mimeType=video/x-msvideo&codecs=xvid,mp3";
 
             // Cargar el video
             videoPlayerElement.load();
