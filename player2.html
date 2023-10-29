@@ -8,9 +8,6 @@
     <div>
         <video id="my-video" class="plyr" controls poster="" crossorigin>
             <!-- Aquí puedes agregar múltiples fuentes de video compatibles -->
-            <source src="tu_video.mp4" type='video/mp4' />
-            <source src="tu_video.mkv" type='video/x-matroska' />
-            <source src="tu_video.avi" type='video/x-msvideo' />
         </video>
         <button id="play-button">Play Video</button>
     </div>
@@ -24,36 +21,47 @@
         }
 
         const videoID = obtenerParametroDeURL("id");
+        const apiKey = obtenerParametroDeURL("api_key");
         const posterURL = obtenerParametroDeURL("poster");
 
-        if (videoID) {
-            // Define el poster
-            videoPlayer.poster = posterURL || '';
+        if (videoID && apiKey) {
+            // Hacer una solicitud a la API de Google Drive para obtener los enlaces de video
+            fetch(`https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${apiKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Define el poster
+                    videoPlayer.poster = posterURL || '';
 
-            // Handle user interaction (click en el botón de reproducción)
-            const playButton = document.getElementById("play-button");
-            playButton.addEventListener("click", function() {
-                // Reproducir el video
-                videoPlayer.play();
-            });
+                    // Agregar las fuentes de video
+                    data.links.forEach(link => {
+                        videoPlayer.source = {
+                            type: 'video',
+                            sources: [
+                                {
+                                    src: link.url,
+                                    type: link.type,
+                                },
+                            ],
+                        };
+                    });
 
-            // Cargar el reproductor Plyr
-            videoPlayer.source = {
-                type: 'video',
-                sources: [
-                    {
-                        src: `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${apiKey}`,
-                        type: 'video/mp4', // Cambia el tipo al formato del video que deseas cargar
-                    },
-                ],
-            };
-
-            // Muestra el reproductor de video
-            videoPlayer.play();
+                    // Manejar la reproducción del video
+                    const playButton = document.getElementById("play-button");
+                    playButton.addEventListener("click", function() {
+                        videoPlayer.play();
+                    });
+                    
+                    // Reproducir el video
+                    videoPlayer.play();
+                })
+                .catch(error => {
+                    console.error("Error al obtener enlaces de video: " + error);
+                });
         } else {
-            // Manejar el caso en el que falta el ID del video
-            console.error("ID de video no proporcionado en la URL");
+            // Manejar el caso en el que falta el ID de video o la clave de API
+            console.error("ID de video o API key no proporcionados en la URL");
         }
     </script>
 </body>
 </html>
+
