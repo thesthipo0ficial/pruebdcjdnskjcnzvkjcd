@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reproductor de Video</title>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.2/plyr.css" />
+</head>
+<body>
+    <div>
+        <video id="my-video" class="plyr" controls poster="" crossorigin>
+            <!-- Aquí puedes agregar múltiples fuentes de video compatibles -->
+            <source src="tu_video.mp4" type='video/mp4' />
+            <source src="tu_video.mkv" type='video/x-matroska' />
+            <source src="tu_video.avi" type='video/x-msvideo' />
+        </video>
+        <button id="play-button">Play Video</button>
+    </div>
+    <script src="https://cdn.plyr.io/3.6.2/plyr.js"></script>
+    <script>
+        const videoPlayer = new Plyr('#my-video');
+
+        function obtenerParametroDeURL(nombre) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(nombre);
+        }
+
+        const videoID = obtenerParametroDeURL("id");
+        const posterURL = obtenerParametroDeURL("poster");
+
+        if (videoID) {
+            // Define el poster
+            videoPlayer.poster = posterURL || '';
+
+            // Handle user interaction (click en el botón de reproducción)
+            const playButton = document.getElementById("play-button");
+            playButton.addEventListener("click", function() {
+                // Reproducir el video
+                videoPlayer.play();
+            });
+
+            // Cargar el reproductor Plyr
+            videoPlayer.source = {
+                type: 'video',
+                sources: [
+                    {
+                        src: `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${apiKey}`,
+                        type: 'video/mp4', // Cambia el tipo al formato del video que deseas cargar
+                    },
+                ],
+            };
+
+            // Muestra el reproductor de video
+            videoPlayer.play();
+        } else {
+            // Manejar el caso en el que falta el ID del video
+            console.error("ID de video no proporcionado en la URL");
+        }
+    </script>
+</body>
+</html>
