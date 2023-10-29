@@ -27,8 +27,8 @@
         const videoID = obtenerParametroDeURL("id");
         const posterURL = obtenerParametroDeURL("poster");
 
-        if (videoID) {
-            const videoURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=AIzaSyDP4qvySeOXeuHX1A5hlcyDVqowPuUol3E`;
+            if (videoID && apiKey) {
+            const videoURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${apiKey}`;
             const videoPlayer = document.getElementById("my-video");
             const playButton = document.getElementById("play-button");
 
