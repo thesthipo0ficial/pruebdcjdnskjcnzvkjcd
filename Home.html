@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generador de URL e Iframe</title>
+    <style>
+        /* Estilos CSS existentes */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #111; /* Fondo negro */
+            color: white;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            transition: background-color 0.5s; /* Animación de cambio de fondo */
+        }
+
+        .container {
+            background-color: #111; /* Fondo oscuro */
+            border: 2px solid #303030;
+            border-radius: 10px;
+            padding: 20px;
+            width: 400px;
+        }
+
+        h1 {
+            color: #ff0000; /* Rojo */
+            font-size: 24px;
+        }
+
+        label {
+            color: #ff0000; /* Rojo */
+            display: block;
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        input[type="text"],
+        input[type="url"],
+        select {
+            padding: 10px;
+            width: 100%;
+            background-color: #111; /* Fondo oscuro */
+            color: white;
+            border: 1px solid #303030;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+
+        input[type="button"] {
+            padding: 10px 20px;
+            background-color: #ff0000; /* Rojo */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.5s; /* Animación de cambio de color de fondo */
+        }
+
+        input[type="button"]:hover {
+            background-color: #d40000; /* Rojo oscuro al pasar el mouse */
+        }
+
+        .output-container {
+            background-color: #111; /* Fondo oscuro */
+            border: 2px solid #303030;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .output-container p {
+            color: #ff0000; /* Rojo */
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            background-color: #111; /* Fondo oscuro */
+            color: white;
+            border: 1px solid #303030;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        .copy-button {
+            background-color: #ff0000; /* Rojo */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: background-color 0.5s; /* Animación de cambio de color de fondo */
+        }
+
+        .copy-button:hover {
+            background-color: #d40000; /* Rojo oscuro al pasar el mouse */
+        }
+
+        /* Styles for the modal window */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+        }
+
+        .modal-content {
+            background-color: #111; /* Fondo oscuro */
+            border: 2px solid #303030;
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #ff0000; /* Rojo */
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+  
+     <script>
+        function mostrarConfiguracion() {
+            var modal = document.getElementById("configModal");
+            modal.style.display = "block";
+        }
+
+        function cerrarConfiguracion() {
+            var modal = document.getElementById("configModal");
+            modal.style.display = "none";
+        }
+
+        function guardarConfiguracion() {
+            var apiKey = document.getElementById("api_key").value;
+            var selectedLanguage = document.getElementById("config-language").value;
+            var selectedLibrary = document.getElementById("library").value;
+
+            // Guardar la API Key, el idioma y la biblioteca en el almacenamiento local
+            localStorage.setItem("api_key", apiKey);
+            localStorage.setItem("selected_language", selectedLanguage);
+            localStorage.setItem("selected_library", selectedLibrary);
+
+            cerrarConfiguracion();
+            cambiarIdioma(selectedLanguage); // Cambiar el idioma después de guardar
+        }
+
+        function obtenerApiKey() {
+            var apiKey = localStorage.getItem("api_key");
+            var selectedLanguage = localStorage.getItem("selected_language");
+            var selectedLibrary = localStorage.getItem("selected_library");
+
+            if (apiKey) {
+                document.getElementById("api_key").value = apiKey;
+            }
+
+            if (selectedLanguage) {
+                cambiarIdioma(selectedLanguage);
+                document.getElementById("config-language").value = selectedLanguage;
+            } else {
+                cambiarIdioma("en"); // Establecer un idioma predeterminado si no se ha guardado uno
+            }
+
+            if (selectedLibrary) {
+                document.getElementById("library").value = selectedLibrary;
+            }
+        }
+
+        function cambiarIdioma(selectedLanguage) {
+            // Implementa una lógica para cambiar el idioma de los elementos HTML según el idioma seleccionado.
+            var elements = {
+                "es": {
+                    "id-label": "ID:",
+                    "url-poster-label": "URL del Póster:",
+                    "generate-button": "Generar URL e Iframe",
+                    "config-button": "Configuración",
+                    "url-label": "URL Generada:",
+                    "copy-url-button": "Copiar al Portapapeles",
+                    "copy-iframe-button": "Copiar al Portapapeles",
+                    "iframe-label": "Código Iframe"
+                },
+                "en": {
+                    "id-label": "ID:",
+                    "url-poster-label": "Poster URL:",
+                    "generate-button": "Generate URL and Iframe",
+                    "config-button": "Settings",
+                    "url-label": "Generated URL:",
+                    "copy-url-button": "Copy to Clipboard",
+                    "copy-iframe-button": "Copy to Clipboard",
+                    "iframe-label": "Iframe Code"
+                },
+                "pt": {
+                    "id-label": "ID:",
+                    "url-poster-label": "URL do Pôster:",
+                    "generate-button": "Gerar URL e Iframe",
+                    "config-button": "Configurações",
+                    "url-label": "URL Gerada:",
+                    "copy-url-button": "Copiar para a Área de Transferência",
+                    "copy-iframe-button": "Copiar para área de transferência",
+                    "iframe-label": "Código Iframe"
+                }
+            };
+
+            if (elements[selectedLanguage]) {
+                for (var key in elements[selectedLanguage]) {
+                    if (elements[selectedLanguage].hasOwnProperty(key)) {
+                        var element = document.getElementById(key);
+                        if (element) {
+                            element.innerText = elements[selectedLanguage][key];
+                        }
+                    }
+                }
+            }
+        }
+
+        function generarURLyIframe() {
+            // Agrega aquí la lógica para generar la URL e iframe
+            var id = document.getElementById("id").value;
+            var urlPoster = document.getElementById("url_poster").value;
+            var library = document.getElementById("library").value;
+            var apiKey = document.getElementById("api_key").value;
+
+  // Obtener la URL base del sitio web actual
+    var baseUrl = window.location.origin;
+
+             // Generar la URL según la biblioteca seleccionada
+    var urlGenerada = baseUrl + "/player.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
+
+    // Modificar la URL si la biblioteca es "Player 2"
+    if (library === "player2") {
+        urlGenerada = baseUrl + "/player1.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
+    }
+
+    if (library === "player3") {
+        urlGenerada = baseUrl + "/player2.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
+    }
+
+            var iframeCode = '<iframe src="' + urlGenerada + '"></iframe';
+
+            document.getElementById("url_generada").value = urlGenerada;
+            document.getElementById("iframe_code").value = iframeCode;
+        }
+
+        function copiarAlPortapapeles(elementId) {
+            var copyText = document.getElementById(elementId);
+            copyText.select();
+            document.execCommand("copy");
+            alert("Texto copiado al portapapeles: " + copyText.value);
+        }
+    </script>
+
+</head>
+<body>
+<body onload="obtenerApiKey()">
+    <div class="container">
+        <h1 id="title"><img src="https://i.ibb.co/M7xPK5S/image-removebg-preview-5.png" alt="Título con imagen" style="width: 300px; height: 80px;"></h1>
+        <label id="id-label" for="id">ID:</label>
+        <input type="text" id="id" required>
+        
+        <label id="url-poster-label" for="url_poster">URL del Póster:</label>
+        <input type="url" id="url_poster" required>
+        
+
+        <input type="button" value="Generar URL e Iframe" id="generate-button" onclick="generarURLyIframe()">
+        <input type="button" value="Configuración" id="config-button" onclick="mostrarConfiguracion()">
+
+        <div class="output-container">
+            <p id="url-label">URL Generada:</p>
+            <textarea id="url_generada" rows="4" readonly></textarea>
+            <button class="copy-button" id="copy-url-button" onclick="copiarAlPortapapeles('url_generada')">Copiar al Portapapeles</button>
+        </div>
+
+        <div class="output-container">
+            <p id="iframe-label">Código Iframe:</p>
+            <textarea id="iframe_code" rows="4" readonly></textarea>
+            <button class="copy-button" id="copy-iframe-button" onclick="copiarAlPortapapeles('iframe_code')">Copiar al Portapapeles</button>
+        </div>
+    </div>
+
+    <!-- Modal window for configuration -->
+    <div id="configModal" class="modal">
+        <div class="modal-content">
+            <button class="close-button" onclick="cerrarConfiguracion()">&times;</button>
+            <h2>Configuración</h2>
+            <label for="api_key">API Drive:</label>
+            <input type="text" id="api_key">
+            
+            <div class="language-container">
+                <label for="config-language">Idioma:</label>
+                <select id="config-language">
+                    <option value="es">Español</option>
+                    <option value="en">Inglés</option>
+                    <option value="pt">Portugués</option>
+                </select>
+            </div>
+            
+            <label for="library">Reproductor:</label>
+            <select id="library" name="library">
+                <option value="player1">Video JS</option>
+                <option value="player2">JwPlayer</option>
+                <option value="player3">Plyr</option>
+            </select>
+            
+            <input type="button" value="Guardar" onclick="guardarConfiguracion()">
+        </div>
+    </div>
+</body>
+</html>

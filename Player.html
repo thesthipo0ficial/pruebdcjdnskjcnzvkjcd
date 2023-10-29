@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reproductor de Video</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sh20raj/SopPlayer@main/CatSu/catsu.min.css" />
+    <link rel='stylesheet' href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css'>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Questrial'>
+    <style>
+        /* Clase para ocultar el reproductor de video al cargar la página */
+        .hidden-video {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+
+
+
+    <div>
+        <video id="my-video" class="video-js vjs-default-skin hidden-video" controls data-setup='{}' loop>
+            <source src="" type='video/mp4' />
+        </video>
+    </div>
+    <script src="https://cdn.jsdelivr.net/gh/sh20raj/SopPlayer@main/CatSu/catsu.min.js"></script>
+    <script>
+        function obtenerParametroDeURL(nombre) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(nombre);
+        }
+
+        // Obtener el ID del video de Google Drive desde la URL
+        const videoID = obtenerParametroDeURL("id");
+        const posterURL = obtenerParametroDeURL("poster");
+
+        if (videoID) {
+            const apiKey = localStorage.getItem("api_key");
+            const videoURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${apiKey}`;
+            const videoPlayer = document.getElementById("my-video");
+
+            // Establecer la fuente del video
+            videoPlayer.querySelector("source").src = videoURL;
+
+            // Cargar y reproducir el video
+            videoPlayer.load();
+            videoPlayer.play();
+
+            // Establecer el póster
+            videoPlayer.poster = posterURL || '';
+
+            // Mostrar el reproductor de video
+            videoPlayer.classList.remove("hidden-video");
+        } else {
+           
+        }
+    </script>
+</body>
+</html>
