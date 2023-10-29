@@ -6,8 +6,11 @@
 </head>
 <body>
     <div>
-        <video id="my-video" class="plyr" controls poster="" crossorigin>
+        <video id="my-video" class="plyr" controls data-setup='{}'>
             <!-- Aquí puedes agregar múltiples fuentes de video compatibles -->
+            <source src="" type='video/mp4' />
+            <source src="" type='video/mkv' />
+            <source src="" type='video/avi' />
         </video>
         <button id="play-button">Play Video</button>
     </div>
@@ -20,43 +23,35 @@
             return urlParams.get(nombre);
         }
 
+        // Obtener el video ID, la API key y el póster de la URL
         const videoID = obtenerParametroDeURL("id");
         const apiKey = obtenerParametroDeURL("api_key");
         const posterURL = obtenerParametroDeURL("poster");
 
-        if (videoID && apiKey) {
-            // Hacer una solicitud a la API de Google Drive para obtener los enlaces de video
-            fetch(`https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${apiKey}`)
-                .then(response => response.json())
-                .then(data => {
-                    // Define el poster
-                    videoPlayer.poster = posterURL || '';
+        if (videoID && apiKey) { // Comprobar si tanto el videoID como la apiKey están presentes
+            const videoURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${apiKey}`;
+            const videoPlayerElement = document.getElementById("my-video");
+            const playButton = document.getElementById("play-button");
 
-                    // Agregar las fuentes de video
-                    data.links.forEach(link => {
-                        videoPlayer.source = {
-                            type: 'video',
-                            sources: [
-                                {
-                                    src: link.url,
-                                    type: link.type,
-                                },
-                            ],
-                        };
-                    });
+            // Agregar las fuentes de video con sus tipos MIME
+            videoPlayerElement.querySelector('source[type="video/mp4"]').src = videoURL;
+            videoPlayerElement.querySelector('source[type="video/mkv"]').src = videoURL;
+            videoPlayerElement.querySelector('source[type="video/avi"]').src = videoURL;
 
-                    // Manejar la reproducción del video
-                    const playButton = document.getElementById("play-button");
-                    playButton.addEventListener("click", function() {
-                        videoPlayer.play();
-                    });
-                    
-                    // Reproducir el video
-                    videoPlayer.play();
-                })
-                .catch(error => {
-                    console.error("Error al obtener enlaces de video: " + error);
-                });
+            // Cargar el video
+            videoPlayerElement.load();
+
+            // Manejar la interacción del usuario (clic en el botón de reproducción)
+            playButton.addEventListener("click", function() {
+                // Reproducir el video
+                videoPlayer.play();
+            });
+
+            // Establecer el póster
+            videoPlayerElement.poster = posterURL || '';
+
+            // Mostrar el reproductor de video
+            videoPlayerElement.classList.remove("hidden-video");
         } else {
             // Manejar el caso en el que falta el ID de video o la clave de API
             console.error("ID de video o API key no proporcionados en la URL");
@@ -64,4 +59,3 @@
     </script>
 </body>
 </html>
-
