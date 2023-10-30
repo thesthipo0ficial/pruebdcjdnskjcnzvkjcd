@@ -1,0 +1,33 @@
+<script src="https://jwpsrv.com/library/dvlGEDvMEeSLyCIACtqXBA.js"></script>
+
+<div id="playerAJxJyoaBJaaN"></div>
+
+<script type="text/javascript">
+    // Función para obtener parámetros de la URL
+    function obtenerParametroDeURL(nombre) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(nombre);
+    }
+
+    // Obtener los valores de ID de video, API Key y póster de la URL
+    const videoID = obtenerParametroDeURL("id");
+    const apiKey = obtenerParametroDeURL("api_key");
+    const posterURL = obtenerParametroDeURL("poster");
+
+    // Comprobar si se proporcionaron los valores necesarios
+    if (videoID && apiKey) {
+        const videoURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${apiKey}`;
+        jwplayer('playerAJxJyoaBJaaN').setup({
+            file: videoURL, // Usar la variable videoURL en lugar de una cadena
+            image: posterURL || '', // Establece la imagen de póster
+            title: 'RAP NARUTO ||| SHARKNESS (con ZetaEme)',
+            width: '100%',
+            aspectratio: '16:9',
+            autostart: true, // Agregar autostart si deseas que el video comience automáticamente
+            mute: true,
+            repeat: true
+        });
+    } else {
+        console.error("Falta el ID del video y/o la API Key de Google Drive en los parámetros de la URL.");
+    }
+</script>
