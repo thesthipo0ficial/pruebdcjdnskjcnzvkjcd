@@ -10,22 +10,29 @@
             overflow: hidden;
         }
 
+        #my-video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+        }
+
         #my-video {
+            position: absolute;
             width: 100%;
             height: 100%;
         }
     </style>
 </head>
 <body>
-    <div>
+    <div id="my-video-container">
         <video id="my-video" class="plyr" controls data-setup='{}'>
             <!-- Aquí puedes agregar múltiples fuentes de video compatibles con códecs de audio -->
             <source src="" type='video/mp4' codecs="avc1.42E01E mp4a.40.2" />
             <source src="" type='video/mkv' codecs="avc1.42E01E mp4a.40.2" />
             <source src="" type='video/avi' codecs="xvid mp3" />
         </video>
-        <button id="play-button">Play Video</button>
     </div>
+
     <script src="https://cdn.plyr.io/3.6.2/plyr.js"></script>
     <script>
          const videoPlayer = new Plyr('#my-video');
@@ -43,7 +50,6 @@
         if (videoID && apiKey) { // Comprobar si tanto el videoID como la apiKey están presentes
             const videoURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${apiKey}`;
             const videoPlayerElement = document.getElementById("my-video");
-            const playButton = document.getElementById("play-button");
 
             // Agregar las fuentes de video con códecs de audio
             videoPlayerElement.querySelector('source[type="video/mp4"]').src = videoURL + "&mimeType=video/mp4&codecs=avc1.42E01E,mp4a.40.2";
@@ -53,20 +59,13 @@
             // Cargar el video
             videoPlayerElement.load();
 
-            // Manejar la interacción del usuario (clic en el botón de reproducción)
-            playButton.addEventListener("click", function() {
-                // Reproducir el video
-                videoPlayer.play();
-            });
-
             // Establecer el póster
             videoPlayerElement.poster = posterURL || '';
 
             // Mostrar el reproductor de video
             videoPlayerElement.classList.remove("hidden-video");
         } else {
-            // Manejar el caso en el que falta el ID de video o la clave de API
-            console.error("ID de video o API key no proporcionados en la URL");
+           
         }
     </script>
 </body>
