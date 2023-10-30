@@ -37,11 +37,21 @@
         <video id="my-video" class="fluid-player" controls data-setup='{}'>
             <!-- Aquí puedes agregar múltiples fuentes de video compatibles con códecs de audio -->
             <source src="" type="video/mp4" codecs="avc1.42E01E mp4a.40.2" />
-            <source src="" type="video/mkv" codecs="avc1.42E01E mp4a.40.2" />
-            <source src="" type="video/avi" codecs="xvid mp3" />
+            <source src="" type="video/mkv" codecs="avc1.42E01E ac-3" />
+            <source src="" type="video/avi" codecs="xvid ac3" />
         </video>
     </div>
-    
+
+    <!-- Agrega un botón para cambiar la calidad del video -->
+    <div id="quality-selector">
+        <label for="quality">Cambiar calidad:</label>
+        <select id="quality">
+            <option value="high">Alta calidad</option>
+            <option value="medium">Calidad media</option>
+            <option value="low">Baja calidad</option>
+        </select>
+    </div>
+
     <script>
         const videoPlayer = fluidPlayer('my-video');
 
@@ -62,7 +72,7 @@
             // Agregar las fuentes de video con códecs de audio
             videoPlayerElement.querySelector('source[type="video/mp4"]').src = videoURL + "&mimeType=video/mp4&codecs=avc1.42E01E,mp4a.40.2";
             videoPlayerElement.querySelector('source[type="video/mkv"]').src = videoURL + "&mimeType=video/x-matroska&codecs=avc1.42E01E,ac-3";
-            videoPlayerElement.querySelector('source[type="video/avi"]').src = videoURL + "&mimeType=video/x-msvideo&codecs=xvid,mp3";
+            videoPlayerElement.querySelector('source[type="video/avi"]').src = videoURL + "&mimeType=video/x-msvideo&codecs=xvid,ac3";
 
             // Cargar el video
             videoPlayerElement.load();
@@ -75,6 +85,24 @@
         } else {
             // Lógica para manejar el caso en el que falten parámetros de video o API key
         }
+
+        // Obtén una referencia al elemento de selección de calidad
+        const qualitySelector = document.getElementById("quality");
+
+        // Agrega un evento para cambiar la calidad del video cuando se selecciona una opción
+        qualitySelector.addEventListener("change", function () {
+            const selectedQuality = qualitySelector.value;
+            // Cambia la fuente de video en función de la calidad seleccionada
+            if (selectedQuality === "high") {
+                videoPlayerElement.querySelector('source[type="video/mp4"]').src = videoURL + "&mimeType=video/mp4&codecs=avc1.42E01E,mp4a.40.2";
+            } else if (selectedQuality === "medium") {
+                videoPlayerElement.querySelector('source[type="video/mp4"]').src = videoURL + "&mimeType=video/mp4&codecs=avc1.42E01E,mp4a.40.2";
+            } else if (selectedQuality === "low") {
+                videoPlayerElement.querySelector('source[type="video/mp4"]').src = videoURL + "&mimeType=video/mp4&codecs=avc1.42E01E,mp4a.40.2";
+            }
+            // Carga el nuevo video
+            videoPlayerElement.load();
+        });
     </script>
 </body>
 </html>
