@@ -255,7 +255,7 @@
      if (library === "player4") {
         urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player3.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
     }
-            var iframeCode = '<iframe width="560" height="315" src=" + urlGenerada +" title="STPDRIVEPLAYER" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>;
+            var iframeCode = '<iframe width="560" height="315" src="' + urlGenerada + '" title="STPDRIVEPLAYER" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
 
             document.getElementById("url_generada").value = urlGenerada;
             document.getElementById("iframe_code").value = iframeCode;
