@@ -252,6 +252,9 @@
         urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player2.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
     }
 
+     if (library === "player4") {
+        urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player3.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
+    }
             var iframeCode = '<iframe src="' + urlGenerada + '"></iframe';
 
             document.getElementById("url_generada").value = urlGenerada;
@@ -316,6 +319,7 @@
                 <option value="player1">Video JS</option>
                 <option value="player2">Fluid Player</option>
                 <option value="player3">Plyr</option>
+                <option value="player4">Jw Player</option>
             </select>
             
             <input type="button" value="Guardar" onclick="guardarConfiguracion()">
