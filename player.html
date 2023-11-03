@@ -25,10 +25,10 @@
 
         // Get the video ID and API key from the URL
         const videoID = obtenerParametroDeURL("id");
-        const apiKey = obtenerParametroDeURL("api_key"); // Changed to "api_key"
+        const apiKey = obtenerParametroDeURL("api_key");
         const posterURL = obtenerParametroDeURL("poster");
 
-        if (videoID && apiKey) { // Check if both videoID and apiKey are present
+        if (videoID && apiKey) {
             const videoURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${apiKey}`;
             const videoPlayer = document.getElementById("my-video");
             const playButton = document.getElementById("play-button");
@@ -53,6 +53,24 @@
         } else {
             // Handle the case where either video ID or API key is missing
             console.error("ID de video o API key no proporcionados en la URL");
+        }
+
+        // Get the VAST URL from local storage
+        const vastURL = localStorage.getItem("vast_url");
+
+        // Load VAST ad if VAST URL is provided in local storage
+        if (vastURL) {
+            const videoPlayer = document.getElementById("my-video");
+            const options = {
+                adTagUrl: vastURL,
+            };
+            const player = videojs("my-video");
+
+            // Initialize the VAST ad plugin
+            player.ima(options);
+
+            // Play the video with VAST ad
+            player.play();
         }
     </script>
 </body>
