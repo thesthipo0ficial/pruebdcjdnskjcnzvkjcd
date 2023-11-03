@@ -264,12 +264,15 @@
                 urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player3.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
             }
 
-            var iframeCode = '<iframe width="560" height="315" src="' + urlGenerada + '" title="STPDRIVEPLAYER" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
 
-        // Encriptar la URL generada después de ?id=
+            // Encriptar la URL generada después de ?id=
     var parts = urlGenerada.split('?id=');
     var encryptedUrl = parts[0] + "?id=" + btoa(parts[1]);
 
+            document.getElementById("url_generada").value = encryptedUrl;
+            var iframeCode = '<iframe width="560" height="315" src="' + urlGenerada + '" title="STPDRIVEPLAYER" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+
+        
         function copiarAlPortapapeles(elementId) {
             var copyText = document.getElementById(elementId);
             copyText.select();
