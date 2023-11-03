@@ -19,63 +19,53 @@
     <script src="https://cdn.jsdelivr.net/gh/sh20raj/SopPlayer@main/CatSu/catsu.min.js"></script>
     <script>
         function obtenerParametroDeURL(nombre) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(nombre);
-}
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(nombre);
+        }
 
-// Obtener la parte encriptada de la URL
-const videoIDEncriptado = obtenerParametroDeURL("id");
-const apiKey = obtenerParametroDeURL("api_key");
-const posterURL = obtenerParametroDeURL("poster");
+        // Obtener la parte encriptada de la URL
+        const videoIDEncriptado = obtenerParametroDeURL("id");
+        const apiKey = obtenerParametroDeURL("api_key");
+        const posterURL = obtenerParametroDeURL("poster");
 
-if (videoIDEncriptado && apiKey) {
-    // Desencriptar la parte encriptada de la URL
-    const videoID = atob(videoIDEncriptado);
+        if (videoIDEncriptado && apiKey) {
+            // Desencriptar la parte encriptada de la URL
+            const videoID = atob(videoIDEncriptado);
 
-    const videoURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${apiKey}`;
-    const videoPlayer = document.getElementById("my-video");
-    const playButton = document.getElementById("play-button");
+            // Construir la URL de reproducción del video
+            const videoURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${apiKey}`;
 
-    // Establecer la fuente del video
-    videoPlayer.querySelector("source").src = videoURL;
+            // Establecer la fuente del video
+            const videoPlayer = document.getElementById("my-video");
+            videoPlayer.querySelector("source").src = videoURL;
 
-    // Cargar el video
-    videoPlayer.load();
+            // Cargar el video
+            videoPlayer.load();
 
-    // Manejar la interacción del usuario (clic en el botón de reproducción)
-    playButton.addEventListener("click", function() {
-        // Reproducir el video
-        videoPlayer.play();
-    });
+            // Manejar la interacción del usuario (clic en el botón de reproducción)
+            document.getElementById("play-button").addEventListener("click", function() {
+                // Reproducir el video
+                videoPlayer.play();
+            });
 
-    // Establecer el póster
-    videoPlayer.poster = posterURL || '';
+            // Establecer el póster
+            videoPlayer.poster = posterURL || '';
 
-    // Mostrar el reproductor de video
-    videoPlayer.classList.remove("hidden-video");
-} else {
-    // Manejar el caso en el que falte el ID del video o la API key
-    console.error("ID de video o API key no proporcionados en la URL");
-}
+            // Mostrar el reproductor de video
+            videoPlayer.classList.remove("hidden-video");
+        } else {
+            // Manejar el caso en el que falte el ID del video o la API key
+            console.error("ID de video o API key no proporcionados en la URL");
+        }
 
-// Obtener la URL VAST del almacenamiento local
-const vastURL = localStorage.getItem("vast_url");
+        // Obtener la URL VAST del almacenamiento local
+        const vastURL = localStorage.getItem("vast_url");
 
-// Cargar anuncio VAST si se proporciona la URL VAST en el almacenamiento local
-if (vastURL) {
-    const videoPlayer = document.getElementById("my-video");
-    const options = {
-        adTagUrl: vastURL,
-    };
-    const player = videojs("my-video");
-
-    // Inicializar el complemento de anuncio VAST
-    player.ima(options);
-
-    // Reproducir el video con anuncio VAST
-    player.play();
-}
-
+        // Cargar anuncio VAST si se proporciona la URL VAST en el almacenamiento local
+        if (vastURL) {
+            // Agrega aquí la lógica para cargar el anuncio VAST en tu reproductor
+            // Asegúrate de seguir las instrucciones del reproductor para cargar anuncios VAST
+        }
     </script>
 </body>
 </html>
