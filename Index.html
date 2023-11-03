@@ -150,11 +150,13 @@
 
         function guardarConfiguracion() {
             var apiKey = document.getElementById("api_key").value;
+            var vastURL = document.getElementById("vast_url").value; // Obtener la URL del anuncio VAST
             var selectedLanguage = document.getElementById("config-language").value;
             var selectedLibrary = document.getElementById("library").value;
 
-            // Guardar la API Key, el idioma y la biblioteca en el almacenamiento local
+            // Guardar la API Key, la URL del anuncio VAST, el idioma y la biblioteca en el almacenamiento local
             localStorage.setItem("api_key", apiKey);
+            localStorage.setItem("vast_url", vastURL); // Guardar la URL del anuncio VAST
             localStorage.setItem("selected_language", selectedLanguage);
             localStorage.setItem("selected_library", selectedLibrary);
 
@@ -164,11 +166,16 @@
 
         function obtenerApiKey() {
             var apiKey = localStorage.getItem("api_key");
+            var vastURL = localStorage.getItem("vast_url"); // Obtener la URL del anuncio VAST
             var selectedLanguage = localStorage.getItem("selected_language");
             var selectedLibrary = localStorage.getItem("selected_library");
 
             if (apiKey) {
                 document.getElementById("api_key").value = apiKey;
+            }
+
+            if (vastURL) {
+                document.getElementById("vast_url").value = vastURL; // Establecer la URL del anuncio VAST
             }
 
             if (selectedLanguage) {
@@ -236,25 +243,27 @@
             var urlPoster = document.getElementById("url_poster").value;
             var library = document.getElementById("library").value;
             var apiKey = document.getElementById("api_key").value;
+            var vastURL = document.getElementById("vast_url").value; // Obtiene la URL del anuncio VAST
 
-  // Obtener la URL base del sitio web actual
-    var baseUrl = window.location.origin;
+            // Obtener la URL base del sitio web actual
+            var baseUrl = window.location.origin;
 
-             // Generar la URL según la biblioteca seleccionada
-    var urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
+            // Generar la URL según la biblioteca seleccionada
+            var urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
 
-    // Modificar la URL si la biblioteca es "Player 2"
-    if (library === "player2") {
-        urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player1.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
-    }
+            // Modificar la URL si la biblioteca es "Player 2"
+            if (library === "player2") {
+                urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player1.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
+            }
 
-    if (library === "player3") {
-        urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player2.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
-    }
+            if (library === "player3") {
+                urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player2.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
+            }
 
-     if (library === "player4") {
-        urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player3.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
-    }
+            if (library === "player4") {
+                urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player3.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
+            }
+
             var iframeCode = '<iframe width="560" height="315" src="' + urlGenerada + '" title="STPDRIVEPLAYER" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
 
             document.getElementById("url_generada").value = urlGenerada;
@@ -268,7 +277,6 @@
             alert("Texto copiado al portapapeles: " + copyText.value);
         }
     </script>
-
 </head>
 <body>
 <body onload="obtenerApiKey()">
@@ -305,6 +313,11 @@
             <label for="api_key">API Drive:</label>
             <input type="text" id="api_key">
             
+          
+             <!-- Agrega un campo para la URL del anuncio VAST -->
+            <label for="vast_url">URL del Anuncio VAST:</label>
+            <input type="url" id="vast_url">
+          
             <div class="language-container">
                 <label for="config-language">Idioma:</label>
                 <select id="config-language">
