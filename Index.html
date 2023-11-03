@@ -137,7 +137,8 @@
         }
     </style>
   
-     <script>
+   
+    <script>
         function mostrarConfiguracion() {
             var modal = document.getElementById("configModal");
             modal.style.display = "block";
@@ -150,23 +151,22 @@
 
         function guardarConfiguracion() {
             var apiKey = document.getElementById("api_key").value;
-            var vastURL = document.getElementById("vast_url").value; // Obtener la URL del anuncio VAST
+            var vastURL = document.getElementById("vast_url").value;
             var selectedLanguage = document.getElementById("config-language").value;
             var selectedLibrary = document.getElementById("library").value;
 
-            // Guardar la API Key, la URL del anuncio VAST, el idioma y la biblioteca en el almacenamiento local
             localStorage.setItem("api_key", apiKey);
-            localStorage.setItem("vast_url", vastURL); // Guardar la URL del anuncio VAST
+            localStorage.setItem("vast_url", vastURL);
             localStorage.setItem("selected_language", selectedLanguage);
             localStorage.setItem("selected_library", selectedLibrary);
 
             cerrarConfiguracion();
-            cambiarIdioma(selectedLanguage); // Cambiar el idioma después de guardar
+            cambiarIdioma(selectedLanguage);
         }
 
         function obtenerApiKey() {
             var apiKey = localStorage.getItem("api_key");
-            var vastURL = localStorage.getItem("vast_url"); // Obtener la URL del anuncio VAST
+            var vastURL = localStorage.getItem("vast_url");
             var selectedLanguage = localStorage.getItem("selected_language");
             var selectedLibrary = localStorage.getItem("selected_library");
 
@@ -175,14 +175,14 @@
             }
 
             if (vastURL) {
-                document.getElementById("vast_url").value = vastURL; // Establecer la URL del anuncio VAST
+                document.getElementById("vast_url").value = vastURL;
             }
 
             if (selectedLanguage) {
                 cambiarIdioma(selectedLanguage);
                 document.getElementById("config-language").value = selectedLanguage;
             } else {
-                cambiarIdioma("en"); // Establecer un idioma predeterminado si no se ha guardado uno
+                cambiarIdioma("en");
             }
 
             if (selectedLibrary) {
@@ -191,7 +191,6 @@
         }
 
         function cambiarIdioma(selectedLanguage) {
-            // Implementa una lógica para cambiar el idioma de los elementos HTML según el idioma seleccionado.
             var elements = {
                 "es": {
                     "id-label": "ID:",
@@ -200,7 +199,6 @@
                     "config-button": "Configuración",
                     "url-label": "URL Generada:",
                     "copy-url-button": "Copiar al Portapapeles",
-                    "copy-iframe-button": "Copiar al Portapapeles",
                     "iframe-label": "Código Iframe"
                 },
                 "en": {
@@ -210,7 +208,6 @@
                     "config-button": "Settings",
                     "url-label": "Generated URL:",
                     "copy-url-button": "Copy to Clipboard",
-                    "copy-iframe-button": "Copy to Clipboard",
                     "iframe-label": "Iframe Code"
                 },
                 "pt": {
@@ -220,7 +217,6 @@
                     "config-button": "Configurações",
                     "url-label": "URL Gerada:",
                     "copy-url-button": "Copiar para a Área de Transferência",
-                    "copy-iframe-button": "Copiar para área de transferência",
                     "iframe-label": "Código Iframe"
                 }
             };
@@ -238,20 +234,16 @@
         }
 
         function generarURLyIframe() {
-            // Agrega aquí la lógica para generar la URL e iframe
             var id = document.getElementById("id").value;
             var urlPoster = document.getElementById("url_poster").value;
             var library = document.getElementById("library").value;
             var apiKey = document.getElementById("api_key").value;
-            var vastURL = document.getElementById("vast_url").value; // Obtiene la URL del anuncio VAST
+            var vastURL = document.getElementById("vast_url").value;
 
-            // Obtener la URL base del sitio web actual
             var baseUrl = window.location.origin;
 
-            // Generar la URL según la biblioteca seleccionada
             var urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
 
-            // Modificar la URL si la biblioteca es "Player 2"
             if (library === "player2") {
                 urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player1.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
             }
@@ -264,21 +256,23 @@
                 urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player3.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
             }
 
-
-            // Encriptar la URL generada después de ?id=
-    var parts = urlGenerada.split('?id=');
-    var encryptedUrl = parts[0] + "?id=" + btoa(parts[1]);
+            var parts = urlGenerada.split('?id=');
+            var encryptedUrl = parts[0] + "?id=" + btoa(parts[1]);
 
             document.getElementById("url_generada").value = encryptedUrl;
             var iframeCode = '<iframe width="560" height="315" src="' + urlGenerada + '" title="STPDRIVEPLAYER" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+            document.getElementById("iframe_code").value = iframeCode;
+        }
 
-        
         function copiarAlPortapapeles(elementId) {
             var copyText = document.getElementById(elementId);
             copyText.select();
             document.execCommand("copy");
             alert("Texto copiado al portapapeles: " + copyText.value);
         }
+
+        // Llama a esta función para obtener la configuración al cargar la página
+        obtenerApiKey();
     </script>
 </head>
 <body>
