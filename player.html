@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Reproductor de Video</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sh20raj/SopPlayer@main/CatSu/catsu.min.css" />
-    <link rel="stylesheet" href="https://vjs.zencdn.net/7.17.0/video-js.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Questrial">
+    <link rel='stylesheet' href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css'>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Questrial'>
     <style>
         /* Agrega estilos personalizados aquí si es necesario */
     </style>
@@ -12,56 +13,70 @@
 <body>
     <div>
         <video id="my-video" class="video-js vjs-default-skin hidden-video" controls data-setup='{}' loop>
-            <source src="" type="video/mp4" />
+            <source src="" type='video/mp4' />
         </video>
         <button id="play-button">Play Video</button>
     </div>
-    <script src="https://vjs.zencdn.net/7.17.0/video.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/sh20raj/SopPlayer@main/CatSu/catsu.min.js"></script>
     <script>
         function obtenerParametroDeURL(nombre) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(nombre);
-        }
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(nombre);
+}
 
-        function desencriptarURL(urlEncriptada) {
-            // Decodificar la cadena en Base64 utilizando atob()
-            return atob(urlEncriptada);
-        }
+// Obtener la parte encriptada de la URL
+const videoIDEncriptado = obtenerParametroDeURL("id");
+const apiKey = obtenerParametroDeURL("api_key");
+const posterURL = obtenerParametroDeURL("poster");
 
-        // Obtener la parte encriptada de la URL
-        const videoIDEncriptado = obtenerParametroDeURL("id");
-        const apiKey = obtenerParametroDeURL("api_key");
-        const posterURL = obtenerParametroDeURL("poster");
+if (videoIDEncriptado && apiKey) {
+    // Desencriptar la parte encriptada de la URL
+    const videoID = atob(videoIDEncriptado);
 
-        if (videoIDEncriptado && apiKey) {
-            // Desencriptar la parte encriptada de la URL
-            const videoID = desencriptarURL(videoIDEncriptado);
+    const videoURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${apiKey}`;
+    const videoPlayer = document.getElementById("my-video");
+    const playButton = document.getElementById("play-button");
 
-            // Construir la URL de reproducción del video
-            const videoURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${apiKey}`;
-            const videoPlayer = videojs("my-video"); // Obtener el reproductor de video con video.js
+    // Establecer la fuente del video
+    videoPlayer.querySelector("source").src = videoURL;
 
-            // Establecer la fuente del video
-            videoPlayer.src({ src: videoURL, type: "video/mp4" });
+    // Cargar el video
+    videoPlayer.load();
 
-            // Cargar el video
-            videoPlayer.load();
+    // Manejar la interacción del usuario (clic en el botón de reproducción)
+    playButton.addEventListener("click", function() {
+        // Reproducir el video
+        videoPlayer.play();
+    });
 
-            // Manejar la interacción del usuario (clic en el botón de reproducción)
-            document.getElementById("play-button").addEventListener("click", function() {
-                // Reproducir el video
-                videoPlayer.play();
-            });
+    // Establecer el póster
+    videoPlayer.poster = posterURL || '';
 
-            // Establecer el póster
-            videoPlayer.poster(posterURL || '');
+    // Mostrar el reproductor de video
+    videoPlayer.classList.remove("hidden-video");
+} else {
+    // Manejar el caso en el que falte el ID del video o la API key
+    console.error("ID de video o API key no proporcionados en la URL");
+}
 
-            // Mostrar el reproductor de video
-            videoPlayer.removeClass("hidden-video");
-        } else {
-            // Manejar el caso en el que falte el ID del video o la API key
-            console.error("ID de video o API key no proporcionados en la URL");
-        }
+// Obtener la URL VAST del almacenamiento local
+const vastURL = localStorage.getItem("vast_url");
+
+// Cargar anuncio VAST si se proporciona la URL VAST en el almacenamiento local
+if (vastURL) {
+    const videoPlayer = document.getElementById("my-video");
+    const options = {
+        adTagUrl: vastURL,
+    };
+    const player = videojs("my-video");
+
+    // Inicializar el complemento de anuncio VAST
+    player.ima(options);
+
+    // Reproducir el video con anuncio VAST
+    player.play();
+}
+
     </script>
 </body>
 </html>
