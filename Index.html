@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -137,143 +138,180 @@
         }
     </style>
   
-   
-    <script>
-        function mostrarConfiguracion() {
-            var modal = document.getElementById("configModal");
-            modal.style.display = "block";
+<script>
+function cambiarIdioma(selectedLanguage) {
+   var translations = {
+    "es": {
+        "generate-button": "Generar URL e Iframe",
+        "config-button": "Configuración",
+        "copy-url-button": "Copiar al Portapapeles",
+        "copy-iframe-button": "Copiar al Portapapeles",
+        "url-label": "URL Generada:",
+        "iframe-label": "Código Iframe",
+        "config-title": "Configuración",
+        "api-key-label": "API Drive:",
+        "api-key-input": "Introduzca su API Drive",
+        "vast-url-label": "URL del Anuncio VAST:",
+        "vast-url-input": "Introduzca la URL del anuncio VAST"
+    },
+    "en": {
+        "generate-button": "Generate URL and Iframe",
+        "config-button": "Settings",
+        "copy-url-button": "Copy to Clipboard",
+        "copy-iframe-button": "Copy to Clipboard",
+        "url-label": "Generated URL:",
+        "iframe-label": "Iframe Code",
+        "config-title": "Settings",
+        "api-key-label": "API Key:",
+        "api-key-input": "Enter your API Key",
+        "vast-url-label": "VAST Ad URL:",
+        "vast-url-input": "Enter the VAST ad URL"
+    },
+    "pt": {
+        "generate-button": "Gerar URL e Iframe",
+        "config-button": "Configurações",
+        "copy-url-button": "Copiar para a Área de Transferência",
+        "copy-iframe-button": "Copiar para a Área de Transferência",
+        "url-label": "URL Gerada:",
+        "iframe-label": "Código Iframe",
+        "config-title": "Configurações",
+        "api-key-label": "Chave da API:",
+        "api-key-input": "Insira sua chave da API",
+        "vast-url-label": "URL do Anúncio VAST:",
+        "vast-url-input": "Insira a URL do anúncio VAST"
+    }
+};
+
+
+    function translateElement(key, value) {
+        var element = document.getElementById(key);
+        if (element) {
+            if (element.tagName.toLowerCase() === 'input' && element.type.toLowerCase() === 'button') {
+                element.value = value;
+            } else {
+                element.innerText = value;
+            }
+        }
+    }
+
+    function translateElementsInModal(modalId, language) {
+        var modal = document.getElementById(modalId);
+        if (modal) {
+            var elementsToTranslate = modal.querySelectorAll("[data-translation-key]");
+            elementsToTranslate.forEach(function (element) {
+                var key = element.getAttribute("data-translation-key");
+                if (translations[language] && translations[language][key]) {
+                    translateElement(key, translations[language][key]);
+                }
+            });
+        }
+    }
+
+    if (translations[selectedLanguage]) {
+        for (var key in translations[selectedLanguage]) {
+            if (translations[selectedLanguage].hasOwnProperty(key)) {
+                translateElement(key, translations[selectedLanguage][key]);
+            }
         }
 
-        function cerrarConfiguracion() {
-            var modal = document.getElementById("configModal");
-            modal.style.display = "none";
+        // También traduce elementos dentro de configModal
+        translateElementsInModal("configModal", selectedLanguage);
+    }
+}
+    // Función para mostrar la configuración
+    function mostrarConfiguracion() {
+        var modal = document.getElementById("configModal");
+        modal.style.display = "block";
+    }
+
+    // Función para cerrar la configuración
+    function cerrarConfiguracion() {
+        var modal = document.getElementById("configModal");
+        modal.style.display = "none";
+    }
+
+    // Función para guardar la configuración
+    function guardarConfiguracion() {
+        var apiKey = document.getElementById("api_key").value;
+        var vastURL = document.getElementById("vast_url").value;
+        var selectedLanguage = document.getElementById("config-language").value;
+        var selectedLibrary = document.getElementById("library").value;
+
+        localStorage.setItem("api_key", apiKey);
+        localStorage.setItem("vast_url", vastURL);
+        localStorage.setItem("selected_language", selectedLanguage);
+        localStorage.setItem("selected_library", selectedLibrary);
+
+        cerrarConfiguracion();
+        cambiarIdioma(selectedLanguage);
+    }
+
+    // Función para obtener la configuración almacenada
+    function obtenerApiKey() {
+        var apiKey = localStorage.getItem("api_key");
+        var vastURL = localStorage.getItem("vast_url");
+        var selectedLanguage = localStorage.getItem("selected_language");
+        var selectedLibrary = localStorage.getItem("selected_library");
+
+        if (apiKey) {
+            document.getElementById("api_key").value = apiKey;
         }
 
-        function guardarConfiguracion() {
-            var apiKey = document.getElementById("api_key").value;
-            var vastURL = document.getElementById("vast_url").value;
-            var selectedLanguage = document.getElementById("config-language").value;
-            var selectedLibrary = document.getElementById("library").value;
+        if (vastURL) {
+            document.getElementById("vast_url").value = vastURL;
+        }
 
-            localStorage.setItem("api_key", apiKey);
-            localStorage.setItem("vast_url", vastURL);
-            localStorage.setItem("selected_language", selectedLanguage);
-            localStorage.setItem("selected_library", selectedLibrary);
-
-            cerrarConfiguracion();
+        if (selectedLanguage) {
+            document.getElementById("config-language").value = selectedLanguage;
             cambiarIdioma(selectedLanguage);
         }
 
-        function obtenerApiKey() {
-            var apiKey = localStorage.getItem("api_key");
-            var vastURL = localStorage.getItem("vast_url");
-            var selectedLanguage = localStorage.getItem("selected_language");
-            var selectedLibrary = localStorage.getItem("selected_library");
+        if (selectedLibrary) {
+            document.getElementById("library").value = selectedLibrary;
+        }
+    }
 
-            if (apiKey) {
-                document.getElementById("api_key").value = apiKey;
-            }
+    // Resto del código para generar URL e Iframe y copiar al portapapeles
+    function generarURLyIframe() {
+        var id = document.getElementById("id").value;
+        var urlPoster = document.getElementById("url_poster").value;
+        var library = document.getElementById("library").value;
+        var apiKey = document.getElementById("api_key").value;
+        var vastURL = document.getElementById("vast_url").value;
 
-            if (vastURL) {
-                document.getElementById("vast_url").value = vastURL;
-            }
+        var baseUrl = window.location.origin;
 
-            if (selectedLanguage) {
-                cambiarIdioma(selectedLanguage);
-                document.getElementById("config-language").value = selectedLanguage;
-            } else {
-                cambiarIdioma("en");
-            }
+        var urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
 
-            if (selectedLibrary) {
-                document.getElementById("library").value = selectedLibrary;
-            }
+        if (library === "player2") {
+            urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player1.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
         }
 
-        function cambiarIdioma(selectedLanguage) {
-            var elements = {
-                "es": {
-                    "id-label": "ID:",
-                    "url-poster-label": "URL del Póster:",
-                    "generarURLyIframe()": "Generar URL e Iframe",
-                    "config-button": "Configuración",
-                    "url-label": "URL Generada:",
-                    "copy-url-button": "Copiar al Portapapeles",
-                    "iframe-label": "Código Iframe"
-                },
-                "en": {
-                    "id-label": "ID:",
-                    "url-poster-label": "Poster URL:",
-                    "generarURLyIframe()": "Generate URL and Iframe",
-                    "config-button": "Settings",
-                    "url-label": "Generated URL:",
-                    "copy-url-button": "Copy to Clipboard",
-                    "iframe-label": "Iframe Code"
-                },
-                "pt": {
-                    "id-label": "ID:",
-                    "url-poster-label": "URL do Pôster:",
-                    "generarURLyIframe()": "Gerar URL e Iframe",
-                    "config-button": "Configurações",
-                    "url-label": "URL Gerada:",
-                    "copy-url-button": "Copiar para a Área de Transferência",
-                    "iframe-label": "Código Iframe"
-                }
-            };
-
-            if (elements[selectedLanguage]) {
-                for (var key in elements[selectedLanguage]) {
-                    if (elements[selectedLanguage].hasOwnProperty(key)) {
-                        var element = document.getElementById(key);
-                        if (element) {
-                            element.innerText = elements[selectedLanguage][key];
-                        }
-                    }
-                }
-            }
+        if (library === "player3") {
+            urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player2.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
         }
 
-        function generarURLyIframe() {
-            var id = document.getElementById("id").value;
-            var urlPoster = document.getElementById("url_poster").value;
-            var library = document.getElementById("library").value;
-            var apiKey = document.getElementById("api_key").value;
-            var vastURL = document.getElementById("vast_url").value;
-
-            var baseUrl = window.location.origin;
-
-            var urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
-
-            if (library === "player2") {
-                urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player1.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
-            }
-
-            if (library === "player3") {
-                urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player2.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
-            }
-
-            if (library === "player4") {
-                urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player3.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
-            }
-
-            var parts = urlGenerada.split('?id=');
-            var encryptedUrl = parts[0] + "?id=" + btoa(parts[1]);
-
-            document.getElementById("url_generada").value = encryptedUrl;
-            var iframeCode = '<iframe width="560" height="315" src="' + urlGenerada + '" title="STPDRIVEPLAYER" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
-            document.getElementById("iframe_code").value = iframeCode;
+        if (library === "player4") {
+            urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player3.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
         }
 
-        function copiarAlPortapapeles(elementId) {
-            var copyText = document.getElementById(elementId);
-            copyText.select();
-            document.execCommand("copy");
-            alert("Texto copiado al portapapeles: " + copyText.value);
-        }
+        document.getElementById("url_generada").value = urlGenerada;
+        var iframeCode = '<iframe width="560" height="315" src="' + urlGenerada + '" title="STPDRIVEPLAYER" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+        document.getElementById("iframe_code").value = iframeCode;
+    }
 
-        // Llama a esta función para obtener la configuración al cargar la página
-        obtenerApiKey();
-    </script>
+    function copiarAlPortapapeles(elementId) {
+        var copyText = document.getElementById(elementId);
+        copyText.select();
+        document.execCommand("copy");
+        alert("Texto copiado al portapapeles: " + copyText.value);
+    }
+
+    // Llama a esta función para obtener la configuración al cargar la página
+    obtenerApiKey();
+</script>
+
+
 </head>
 <body>
 <body onload="obtenerApiKey()">
@@ -301,38 +339,37 @@
             <button class="copy-button" id="copy-iframe-button" onclick="copiarAlPortapapeles('iframe_code')">Copiar al Portapapeles</button>
         </div>
     </div>
-
-    <!-- Modal window for configuration -->
-    <div id="configModal" class="modal">
-        <div class="modal-content">
-            <button class="close-button" onclick="cerrarConfiguracion()">&times;</button>
-            <h2>Configuración</h2>
-            <label for="api_key">API Drive:</label>
-            <input type="text" id="api_key">
-            
-          
-             <!-- Agrega un campo para la URL del anuncio VAST -->
-            <label for="vast_url">URL del Anuncio VAST:</label>
-            <input type="url" id="vast_url">
-          
-            <div class="language-container">
-                <label for="config-language">Idioma:</label>
-                <select id="config-language">
-                    <option value="es">Español</option>
-                    <option value="en">Inglés</option>
-                    <option value="pt">Portugués</option>
-                </select>
-            </div>
-            
-            <label for="library">Reproductor:</label>
-            <select id="library" name="library">
-                <option value="player1">Video JS</option>
-                <option value="player2">Fluid Player</option>
-                <option value="player3">Plyr</option>
+<!-- Modal window for configuration -->
+<div id="configModal" class="modal">
+    <div class="modal-content">
+        <button class="close-button" onclick="cerrarConfiguracion()">&times;</button>
+        <h2 data-translation-key="config-title">Configuración</h2>
+        <label for="api_key" data-translation-key="api-key-label">API Drive:</label>
+        <input type="text" id="api_key">
+        
+        <!-- Agrega un campo para la URL del anuncio VAST -->
+        <label for="vast_url" data-translation-key="vast-url-label">URL del Anuncio VAST:</label>
+        <input type="url" id="vast_url">
+      
+        <div class="language-container">
+            <label for="config-language" data-translation-key="language-label">Idioma:</label>
+            <select id="config-language">
+                <option value="es" data-translation-key="spanish">Español</option>
+                <option value="en" data-translation-key="english">Inglés</option>
+                <option value="pt" data-translation-key="portuguese">Portugués</option>
             </select>
-            
-            <input type="button" value="Guardar" onclick="guardarConfiguracion()">
         </div>
+        
+        <label for="library" data-translation-key="library-label">Reproductor:</label>
+        <select id="library" name="library">
+            <option value="player1" data-translation-key="video-js">Video JS</option>
+            <option value="player2" data-translation-key="fluid-player">Fluid Player</option>
+            <option value="player3" data-translation-key="plyr">Plyr</option>
+        </select>
+        
+        <input type="button" value="Guardar" onclick="guardarConfiguracion()" data-translation-key="save-button">
     </div>
+</div>
+
 </body>
 </html>
