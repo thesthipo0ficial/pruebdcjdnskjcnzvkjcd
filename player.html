@@ -2,7 +2,9 @@
 <html>
 <head>
     <title>Reproductor de Video</title>
-    <!-- Tus enlaces CSS aquí -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sh20raj/SopPlayer@main/CatSu/catsu.min.css" />
+    <link rel='stylesheet' href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css'>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Questrial'>
     <style>
         /* Add custom styles here if necessary */
     </style>
@@ -14,6 +16,7 @@
         </video>
         <button id="play-button">Play Video</button>
     </div>
+    <script src="https://cdn.jsdelivr.net/gh/sh20raj/SopPlayer@main/CatSu/catsu.min.js"></script>
     <script>
         function obtenerParametroDeURL(nombre) {
             const urlParams = new URLSearchParams(window.location.search);
@@ -24,17 +27,9 @@
         const videoID = obtenerParametroDeURL("id");
         const apiKey = obtenerParametroDeURL("api_key");
         const posterURL = obtenerParametroDeURL("poster");
-        const encryptedURLParam = obtenerParametroDeURL("encrypted_url");
 
         if (videoID && apiKey) {
-            let videoURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${apiKey}`;
-
-            // Check if the encrypted URL parameter exists
-            if (encryptedURLParam) {
-                // Decode the Base64 URL and assign it to videoURL
-                videoURL = atob(encryptedURLParam);
-            }
-
+            const videoURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${apiKey}`;
             const videoPlayer = document.getElementById("my-video");
             const playButton = document.getElementById("play-button");
 
