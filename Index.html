@@ -270,11 +270,10 @@ function cambiarIdioma(selectedLanguage) {
             document.getElementById("library").value = selectedLibrary;
         }
     }
-
-   function generarURLyIframe() {
+function generarURLyIframe() {
     var id = document.getElementById("id").value;
     var urlPoster = document.getElementById("url_poster").value;
-    var subtitleUrl = document.getElementById("subtitle_url").value; // Nueva línea
+    var subtitleUrl = document.getElementById("subtitle_url").value;
     var library = document.getElementById("library").value;
     var apiKey = document.getElementById("api_key").value;
     var vastURL = document.getElementById("vast_url").value;
