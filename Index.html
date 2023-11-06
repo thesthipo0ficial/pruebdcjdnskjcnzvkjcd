@@ -271,34 +271,39 @@ function cambiarIdioma(selectedLanguage) {
         }
     }
 
-    // Resto del código para generar URL e Iframe y copiar al portapapeles
-    function generarURLyIframe() {
-        var id = document.getElementById("id").value;
-        var urlPoster = document.getElementById("url_poster").value;
-        var library = document.getElementById("library").value;
-        var apiKey = document.getElementById("api_key").value;
-        var vastURL = document.getElementById("vast_url").value;
+    /function generarURLyIframe() {
+    var id = document.getElementById("id").value;
+    var urlPoster = document.getElementById("url_poster").value;
+    var subtitleUrl = document.getElementById("subtitle_url").value; // Nueva línea
+    var library = document.getElementById("library").value;
+    var apiKey = document.getElementById("api_key").value;
+    var vastURL = document.getElementById("vast_url").value;
 
-        var baseUrl = window.location.origin;
+    var baseUrl = window.location.origin;
 
-        var urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
+    var urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
 
-        if (library === "player2") {
-            urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player1.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
-        }
-
-        if (library === "player3") {
-            urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player2.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
-        }
-
-        if (library === "player4") {
-            urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player3.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
-        }
-
-        document.getElementById("url_generada").value = urlGenerada;
-        var iframeCode = '<iframe width="560" height="315" src="' + urlGenerada + '" title="STPDRIVEPLAYER" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
-        document.getElementById("iframe_code").value = iframeCode;
+    if (subtitleUrl) {
+        urlGenerada += "&subtitle=" + encodeURIComponent(subtitleUrl); // Agregar la URL del subtítulo si se proporciona
     }
+
+    if (library === "player2") {
+        urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player1.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
+    }
+
+    if (library === "player3") {
+        urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player2.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
+    }
+
+    if (library === "player4") {
+        urlGenerada = baseUrl + "/pruebdcjdnskjcnzvkjcd/player3.html?id=" + id + "&poster=" + encodeURIComponent(urlPoster) + "&api_key=" + apiKey;
+    }
+
+    document.getElementById("url_generada").value = urlGenerada;
+    var iframeCode = '<iframe width="560" height="315" src="' + urlGenerada + '" title="STPDRIVEPLAYER" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+    document.getElementById("iframe_code").value = iframeCode;
+}
+
 
     function copiarAlPortapapeles(elementId) {
         var copyText = document.getElementById(elementId);
@@ -322,7 +327,10 @@ function cambiarIdioma(selectedLanguage) {
         
         <label id="url-poster-label" for="url_poster">URL del Póster:</label>
         <input type="url" id="url_poster" required>
-        
+
+        <label id="subtitle-url-label" for="subtitle_url">URL del Subtítulo:</label>
+<input type="url" id="subtitle_url">
+
 
         <input type="button" value="Generar URL e Iframe" id="generate-button" onclick="generarURLyIframe()">
         <input type="button" value="Configuración" id="config-button" onclick="mostrarConfiguracion()">
