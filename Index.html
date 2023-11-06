@@ -273,7 +273,7 @@ function cambiarIdioma(selectedLanguage) {
 function generarURLyIframe() {
     var id = document.getElementById("id").value;
     var urlPoster = document.getElementById("url_poster").value;
-    var subtitleUrl = document.getElementById("subtitle_url").value;
+    var subtitleUrl = document.getElementById("subtitle_url").value; // Obtiene la URL de subtítulos
     var library = document.getElementById("library").value;
     var apiKey = document.getElementById("api_key").value;
     var vastURL = document.getElementById("vast_url").value;
@@ -304,6 +304,7 @@ function generarURLyIframe() {
 }
 
 
+
     function copiarAlPortapapeles(elementId) {
         var copyText = document.getElementById(elementId);
         copyText.select();
@@ -327,7 +328,7 @@ function generarURLyIframe() {
         <label id="url-poster-label" for="url_poster">URL del Póster:</label>
         <input type="url" id="url_poster" required>
 
-        <label id="subtitle_url" for="subtitle_url">URL del Subtítulo:</label>
+       <label for="subtitle_url">URL del Subtítulo:</label>
 <input type="url" id="subtitle_url">
 
 
