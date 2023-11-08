@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>Generador de URL e Iframe</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
     <style>
         /* Estilos CSS existentes */
         body {
@@ -58,6 +60,34 @@
             cursor: pointer;
             transition: background-color 0.5s; /* Animación de cambio de color de fondo */
         }
+
+
+/* Estilos para los botones de configuración y "Acerca de" */
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.button-container button {
+ background-color: #ff0000;
+    color: white;
+    border: none;
+    padding: 5px 10px; /* Reducir el tamaño del padding */
+    border-radius: 3px; /* Reducir el radio de la esquina */
+    cursor: pointer;
+}
+
+.button-container button:hover {
+    background-color: #d40000; /* Rojo oscuro al pasar el mouse */
+}
+
+.material-icons {
+    font-size: 24px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
 
         input[type="button"]:hover {
             background-color: #d40000; /* Rojo oscuro al pasar el mouse */
@@ -135,6 +165,45 @@
             font-size: 20px;
             cursor: pointer;
         }
+
+
+
+
+/* Estilo base para los botones */
+button {
+    background-color: #ff0000; /* Cambia el color de fondo a tu preferencia */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.small-button {
+    font-size: 14px;
+    padding: 5px;
+}
+
+.small-icon {
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+
+
+/* Estilo para los iconos dentro de los botones */
+.material-icons {
+    font-size: 24px; /* Ajusta el tamaño del ícono según tus preferencias */
+    vertical-align: middle; /* Centra el ícono verticalmente en el botón */
+    margin-right: 5px; /* Espacio entre el ícono y el borde del botón */
+}
+
+/* Estilo específico para el botón de configuración */
+#config-button {
+    background-color: #ff0000; /* Cambia el color de fondo a tu preferencia */
+}
+
     </style>
   
 <script>
@@ -302,6 +371,18 @@ function generarURLyIframe() {
 }
 
 
+ // Función para mostrar la ventana modal "Acerca de"
+    function mostrarAcercaDe() {
+        var modal = document.getElementById("aboutModal");
+        modal.style.display = "block";
+    }
+
+    // Función para cerrar la ventana modal "Acerca de"
+    function cerrarAcercaDe() {
+        var modal = document.getElementById("aboutModal");
+        modal.style.display = "none";
+    }
+
     function copiarAlPortapapeles(elementId) {
         var copyText = document.getElementById(elementId);
         copyText.select();
@@ -328,7 +409,15 @@ function generarURLyIframe() {
 
 
         <input type="button" value="Generar URL e Iframe" id="generate-button" onclick="generarURLyIframe()">
-        <input type="button" value="Configuración" id="config-button" onclick="mostrarConfiguracion()">
+        <button id="config-button" class="custom-button" onclick="mostrarConfiguracion()">
+        <i class="material-icons">settings</i>
+        Configuración
+    </button>
+
+<button id="about-button" class="small-button" onclick="mostrarAcercaDe()">
+    <i class="material-icons small-icon">info</i>
+</button>
+
 
         <div class="output-container">
             <p id="url-label">URL Generada:</p>
@@ -371,6 +460,16 @@ function generarURLyIframe() {
         </select>
         
         <input type="button" value="Guardar" onclick="guardarConfiguracion()" data-translation-key="save-button">
+    </div>
+</div>
+
+<!-- Modal window for "Acerca de" -->
+<div id="aboutModal" class="modal">
+    <div class="modal-content">
+        <button class="close-button" onclick="cerrarAcercaDe()">&times;</button>
+        <img src="logo.png" alt="Logo" style="width: 100px; height: 100px;">
+        <h2>Acerca de</h2>
+        <p>Descripción de tu aplicación o sitio web aquí.</p>
     </div>
 </div>
 
